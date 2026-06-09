@@ -224,3 +224,10 @@ window.addEventListener("load", () => {
         });
 
 });
+
+window.onload = function () {
+
+    document.getElementById("contadorVisitas").innerHTML =
+        "✅ Script cargado correctamente";
+
+};
