@@ -10,7 +10,6 @@
     --vino-sec:#9D2449;
 
     --dorado:#B38E5D;
-    --dorado-claro:#D4C19C;
 
     --gris:#f5f6f8;
 
@@ -47,26 +46,26 @@ main{
 
 .hero{
 
-    padding:70px 20px 30px;
+    padding:60px 20px;
 }
 
 .hero-card{
 
-    max-width:950px;
+    max-width:1000px;
 
     margin:auto;
 
-    background:#ffffff;
+    background:white;
 
-    border-radius:30px;
+    border-radius:32px;
 
     padding:60px;
 
     border:1px solid rgba(98,17,50,.08);
 
     box-shadow:
-    0 12px 30px rgba(0,0,0,.04),
-    0 25px 60px rgba(0,0,0,.04);
+    0 15px 35px rgba(0,0,0,.05),
+    0 30px 60px rgba(0,0,0,.04);
 }
 
 .encabezado{
@@ -76,42 +75,42 @@ main{
 
 .encabezado h1{
 
-    font-size:44px;
+    font-size:58px;
 
     color:var(--vino);
 
-    font-weight:700;
-
     margin-bottom:15px;
+
+    font-weight:700;
 }
 
 .linea-dorada{
 
-    width:120px;
+    width:130px;
 
     height:4px;
 
     background:var(--dorado);
 
-    margin:0 auto 25px;
+    margin:0 auto 30px;
 
     border-radius:10px;
 }
 
 .institucion{
 
-    font-size:24px;
-
     color:var(--dorado);
+
+    font-size:22px;
 
     font-weight:600;
 
-    margin-bottom:20px;
+    margin-bottom:25px;
 }
 
 .descripcion{
 
-    max-width:650px;
+    max-width:700px;
 
     margin:auto;
 
@@ -119,12 +118,12 @@ main{
 
     line-height:1.8;
 
-    font-size:17px;
+    font-size:18px;
 }
 
 .buscador{
 
-    margin-top:40px;
+    margin-top:45px;
 
     display:flex;
 
@@ -132,7 +131,7 @@ main{
 
     border:2px solid #ececec;
 
-    border-radius:18px;
+    border-radius:20px;
 
     overflow:hidden;
 
@@ -149,13 +148,15 @@ main{
 
 .icono{
 
-    padding:20px;
+    width:80px;
 
-    background:#fafafa;
+    text-align:center;
+
+    font-size:28px;
 
     color:var(--vino);
 
-    font-size:22px;
+    background:#fafafa;
 }
 
 .buscador input{
@@ -166,16 +167,18 @@ main{
 
     outline:none;
 
-    padding:20px;
+    padding:22px;
 
-    font-size:20px;
+    font-size:18px;
 
     text-transform:uppercase;
 }
 
 .buscador button{
 
-    width:220px;
+    width:240px;
+
+    height:72px;
 
     border:none;
 
@@ -183,15 +186,13 @@ main{
 
     color:white;
 
-    font-size:16px;
+    font-size:18px;
 
     font-weight:600;
 
     cursor:pointer;
 
     transition:.3s;
-
-    height:64px;
 }
 
 .buscador button:hover{
@@ -207,14 +208,14 @@ main{
 
     color:#777;
 
-    font-size:14px;
+    font-size:15px;
 }
 
 #resultado{
 
-    max-width:950px;
+    max-width:1000px;
 
-    margin:20px auto 0;
+    margin:30px auto;
 
     padding:0 20px;
 }
@@ -223,14 +224,14 @@ main{
 
     background:white;
 
-    border-radius:25px;
+    border-radius:24px;
 
     overflow:hidden;
 
     border:1px solid rgba(98,17,50,.08);
 
     box-shadow:
-    0 10px 30px rgba(0,0,0,.05);
+    0 12px 30px rgba(0,0,0,.05);
 }
 
 .tarjeta-header{
@@ -238,8 +239,8 @@ main{
     background:
     linear-gradient(
         135deg,
-        var(--vino),
-        var(--vino-sec)
+        #621132,
+        #9D2449
     );
 
     color:white;
@@ -249,9 +250,9 @@ main{
 
 .tarjeta-header h2{
 
-    font-size:28px;
+    font-size:30px;
 
-    margin-bottom:8px;
+    margin:0;
 }
 
 .tarjeta-cuerpo{
@@ -268,7 +269,7 @@ main{
 
     display:block;
 
-    color:var(--dorado);
+    color:#B38E5D;
 
     font-size:12px;
 
@@ -276,18 +277,16 @@ main{
 
     letter-spacing:1px;
 
-    text-transform:uppercase;
-
-    margin-bottom:6px;
+    margin-bottom:5px;
 }
 
 .valor{
 
     font-size:18px;
 
-    font-weight:600;
-
     color:#222;
+
+    font-weight:600;
 }
 
 .btn-mapa{
@@ -309,6 +308,8 @@ main{
     margin-top:25px;
 
     font-weight:600;
+
+    transition:.3s;
 }
 
 .btn-mapa:hover{
@@ -316,13 +317,23 @@ main{
     opacity:.9;
 }
 
-footer{
+.mensaje-error,
+.mensaje-advertencia{
 
-    margin-top:60px;
+    padding:20px;
+
+    border-radius:15px;
 
     background:white;
 
+    border-left:5px solid #dc3545;
+}
+
+footer{
+
     border-top:3px solid var(--dorado);
+
+    background:white;
 }
 
 .footer-contenido{
@@ -335,9 +346,9 @@ footer{
 
     text-align:center;
 
-    font-size:11px;
-
     color:#666;
+
+    font-size:11px;
 
     line-height:1.8;
 
@@ -360,7 +371,7 @@ footer{
 
     .encabezado h1{
 
-        font-size:30px;
+        font-size:38px;
     }
 
     .institucion{
