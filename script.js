@@ -1,233 +1,172 @@
-let datos = [];
+const xlsx = require("xlsx");
+const fs = require("fs");
+const path = require("path");
 
-// =====================================
-// CARGAR JSON
-// =====================================
+// =========================
+// CONFIGURACIÓN
+// =========================
 
-fetch("data/data.json")
-    .then(response => {
+const archivoExcel = path.join(
+    __dirname,
+    "../excel/BaseMaestra.xlsx"
+);
 
-        if (!response.ok) {
-            throw new Error(
-                `Error HTTP: ${response.status}`
-            );
-        }
-
-        return response.json();
-
-    })
-    .then(json => {
-
-        datos = json;
-
-        console.log(
-            `✅ Registros cargados: ${datos.length}`
-        );
-
-    })
-    .catch(error => {
-
-        console.error(
-            "❌ Error cargando data.json:",
-            error
-        );
-
+const workbook =
+    xlsx.readFile(archivoExcel, {
+        cellDates: true
     });
 
-// =====================================
-// BOTÓN CONSULTAR
-// =====================================
+const hoja = workbook.Sheets["DATOS"];
 
-document
-    .getElementById("btnConsultar")
-    .addEventListener("click", buscarCCT);
+if (!hoja) {
 
-// =====================================
-// ENTER PARA CONSULTAR
-// =====================================
-
-document
-    .getElementById("cct")
-    .addEventListener("keypress", function(event) {
-
-        if (event.key === "Enter") {
-
-            buscarCCT();
-
-        }
-
-    });
-
-// =====================================
-// MAYÚSCULAS AUTOMÁTICAS
-// =====================================
-
-document
-    .getElementById("cct")
-    .addEventListener("input", function() {
-
-        this.value = this.value.toUpperCase();
-
-    });
-
-// =====================================
-// FUNCIÓN BUSCAR
-// =====================================
-
-function buscarCCT() {
-
-    const cct = document
-        .getElementById("cct")
-        .value
-        .trim()
-        .toUpperCase();
-
-    const resultado =
-        document.getElementById("resultado");
-
-    if (cct === "") {
-
-        resultado.innerHTML = `
-            <div style="
-                background:#fff3cd;
-                border-left:5px solid #ffc107;
-                padding:15px;
-                border-radius:8px;">
-                ⚠️ Ingrese una Clave de Centro de Trabajo.
-            </div>
-        `;
-
-        return;
-    }
-
-    const registro = datos.find(item =>
-        item.cct &&
-        item.cct.toUpperCase() === cct
+    console.error(
+        "❌ No existe una hoja llamada DATOS"
     );
 
-    if (!registro) {
-
-        resultado.innerHTML = `
-            <div style="
-                background:#ffecec;
-                border-left:5px solid #dc3545;
-                padding:15px;
-                border-radius:8px;">
-                ⚠️ No se encontró información para:
-                <strong>${cct}</strong>
-            </div>
-        `;
-
-        return;
-    }
-
-    resultado.innerHTML = `
-
-        <div class="tarjeta-resultado">
-
-            <h2>${registro.escuela || "Sin información"}</h2>
-
-            <div class="campo">
-                <strong>Programa</strong>
-                ${registro.programa || "-"}
-            </div>
-
-            <div class="campo">
-                <strong>Sede de atención</strong>
-                ${registro.sede || "-"}
-            </div>
-
-            <div class="campo">
-                <strong>Fecha de atención</strong>
-                ${registro.fecha_atencion || "-"}
-            </div>
-
-            <div class="campo">
-                <strong>Hora de atención</strong>
-                ${registro.hora_atencion || "-"}
-            </div>
-
-            <div class="campo">
-                <strong>Comité de Contraloría Social</strong>
-                ${registro.estatus_comite || "-"}
-            </div>
-
-            <div class="campo">
-                <strong>Referencia</strong>
-                ${registro.referencia || "-"}
-            </div>
-
-            <a
-                class="btn-mapa"
-                href="https://www.google.com/maps?q=${registro.lat},${registro.lon}"
-                target="_blank">
-
-                📍 Abrir ubicación
-
-            </a>
-
-        </div>
-
-    `;
-
-    // CONTADOR DE CONSULTAS
-
-    fetch("https://api.countapi.xyz/hit/consulta-bbg/consultas")
-        .catch(() => {});
+    process.exit(1);
 }
 
-// =====================================
-// CONTADOR DE VISITAS
-// =====================================
+// =========================
+// FUNCIONES
+// =========================
 
-window.addEventListener("load", () => {
+function formatearFecha(valor) {
 
-    console.log("🚀 Página cargada");
+    if (!valor) return "";
 
-    const contador =
-        document.getElementById("contadorVisitas");
+    const fecha = new Date(valor);
 
-    if (!contador) {
+    if (isNaN(fecha)) return valor;
 
-        console.error(
-            "No existe #contadorVisitas"
-        );
+    const dia =
+        String(fecha.getDate())
+        .padStart(2, "0");
 
-        return;
+    const mes =
+        String(fecha.getMonth() + 1)
+        .padStart(2, "0");
+
+    const anio =
+        fecha.getFullYear();
+
+    return `${dia}/${mes}/${anio}`;
+}
+
+function formatearHora(valor) {
+
+    if (!valor) return "";
+
+    // Si ya viene como texto
+    if (typeof valor === "string") {
+
+        const partes =
+            valor.match(/(\d+):(\d+)/);
+
+        if (partes) {
+
+            return `${partes[1].padStart(2,"0")}:${partes[2]}`;
+        }
+
+        return valor;
     }
 
-    fetch(
-        "https://api.countapi.xyz/hit/consulta-bbg/visitas"
-    )
-        .then(response => response.json())
-        .then(data => {
+    // Si viene como decimal Excel
+    if (typeof valor === "number") {
 
-            contador.innerHTML =
-                `👥 Visitas al portal: ${data.value.toLocaleString("es-MX")}`;
+        const totalMinutos =
+            Math.round(valor * 24 * 60);
 
-            console.log(
-                "Contador actualizado:",
-                data.value
+        const horas =
+            Math.floor(totalMinutos / 60);
+
+        const minutos =
+            totalMinutos % 60;
+
+        return `${String(horas).padStart(2,"0")}:${String(minutos).padStart(2,"0")}`;
+    }
+
+    return valor;
+}
+
+// =========================
+// CONVERSIÓN
+// =========================
+
+let datos =
+    xlsx.utils.sheet_to_json(
+        hoja,
+        {
+            raw: true,
+            defval: ""
+        }
+    );
+
+datos = datos.map(registro => {
+
+    if (registro.fecha_inicio) {
+
+        registro.fecha_inicio =
+            formatearFecha(
+                registro.fecha_inicio
             );
+    }
 
-        })
-        .catch(error => {
+    if (registro.fecha_fin) {
 
-            console.error(
-                "Error contador:",
-                error
+        registro.fecha_fin =
+            formatearFecha(
+                registro.fecha_fin
             );
+    }
 
-            contador.innerHTML =
-                "👥 Visitas al portal: No disponible";
+    if (registro.fecha_atencion) {
 
-        });
+        registro.fecha_atencion =
+            formatearFecha(
+                registro.fecha_atencion
+            );
+    }
 
+    if (registro.hora_atencion) {
+
+        registro.hora_atencion =
+            formatearHora(
+                registro.hora_atencion
+            );
+    }
+
+    return registro;
 });
 
-window.onload = function () {
+// =========================
+// GUARDAR JSON
+// =========================
 
-    document.getElementById("contadorVisitas").innerHTML =
-        "✅ Script cargado correctamente";
+const rutaJson =
+    path.join(
+        __dirname,
+        "../data/data.json"
+    );
 
-};
+fs.writeFileSync(
+    rutaJson,
+    JSON.stringify(
+        datos,
+        null,
+        2
+    ),
+    "utf8"
+);
+
+console.log(
+    "✅ Archivo generado correctamente"
+);
+
+console.log(
+    `📄 Registros: ${datos.length}`
+);
+
+console.log(
+    `📁 ${rutaJson}`
+);
