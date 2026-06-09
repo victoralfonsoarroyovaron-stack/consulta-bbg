@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Consulta de Sede de Atención</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <div class="encabezado">
+
+            <h1>Consulta de Sede de Atención</h1>
+
+            <p class="programas">
+                Becas para el Bienestar Guerrero
+            </p>
+
+            <p class="subtitulo">
+                Ingrese la Clave de Centro de Trabajo (CCT) para consultar la información de atención asignada.
+            </p>
+
+        </div>
+
+        <div class="busqueda">
+
+            <label>Clave de Centro de Trabajo (CCT)</label>
+
+            <input
+                type="text"
+                id="cct"
+                placeholder="Ejemplo: 12DPR2057Q">
+
+            <button id="btnConsultar">
+                CONSULTAR
+            </button>
+
+        </div>
+
+        <div id="resultado"></div>
+
+        <footer>
+
+            <div id="contadorVisitas">
+                👥 Consultas realizadas: cargando...
+            </div>
+
+            <div class="version">
+                Versión 1.0
+            </div>
+
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

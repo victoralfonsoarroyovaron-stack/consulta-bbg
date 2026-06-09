@@ -1,0 +1,235 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    background:#f3f5f7;
+
+    font-family:'Segoe UI', Arial, sans-serif;
+
+    padding:20px;
+}
+
+.contenedor{
+
+    max-width:900px;
+
+    margin:auto;
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:35px;
+
+    box-shadow:0 4px 20px rgba(0,0,0,.08);
+}
+
+.encabezado{
+
+    text-align:center;
+
+    margin-bottom:30px;
+}
+
+.encabezado h1{
+
+    color:#7A2031;
+
+    margin-bottom:10px;
+
+    font-size:32px;
+}
+
+.programas{
+
+    color:#555;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    margin-bottom:10px;
+}
+
+.subtitulo{
+
+    color:#777;
+
+    font-size:14px;
+}
+
+.busqueda{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+    margin-bottom:20px;
+}
+
+label{
+
+    font-weight:600;
+
+    color:#333;
+}
+
+input{
+
+    padding:16px;
+
+    font-size:18px;
+
+    border:2px solid #d9d9d9;
+
+    border-radius:10px;
+
+    transition:.2s;
+}
+
+input:focus{
+
+    outline:none;
+
+    border-color:#7A2031;
+}
+
+button{
+
+    background:#7A2031;
+
+    color:white;
+
+    border:none;
+
+    padding:16px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:600;
+}
+
+button:hover{
+
+    opacity:.95;
+}
+
+#resultado{
+
+    margin-top:25px;
+}
+
+.tarjeta-resultado{
+
+    background:white;
+
+    border-left:6px solid #7A2031;
+
+    border-radius:12px;
+
+    padding:25px;
+
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.tarjeta-resultado h2{
+
+    color:#7A2031;
+
+    margin-bottom:20px;
+
+    font-size:24px;
+}
+
+.campo{
+
+    padding:10px 0;
+
+    border-bottom:1px solid #ececec;
+}
+
+.campo strong{
+
+    display:block;
+
+    color:#555;
+
+    margin-bottom:4px;
+}
+
+.btn-mapa{
+
+    display:inline-block;
+
+    margin-top:20px;
+
+    background:#006341;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:12px 18px;
+
+    border-radius:8px;
+
+    font-weight:600;
+}
+
+.btn-mapa:hover{
+
+    opacity:.95;
+}
+
+footer{
+
+    margin-top:30px;
+
+    padding-top:20px;
+
+    border-top:1px solid #e5e5e5;
+
+    text-align:center;
+
+    color:#777;
+}
+
+.version{
+
+    margin-top:8px;
+
+    font-size:12px;
+}
+
+@media(max-width:768px){
+
+    .contenedor{
+
+        padding:20px;
+    }
+
+    .encabezado h1{
+
+        font-size:26px;
+    }
+
+    input{
+
+        font-size:16px;
+    }
+
+    .tarjeta-resultado h2{
+
+        font-size:20px;
+    }
+}
