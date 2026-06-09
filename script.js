@@ -57,11 +57,48 @@ document
 // FORMATEAR FECHA
 // =====================
 
+function parseFechaTexto(valor) {
+
+    const texto = String(valor).trim();
+
+    const partes = texto.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+
+    if (partes) {
+        let [, dia, mes, anio] = partes;
+
+        if (anio.length === 2) {
+            anio = `20${anio}`;
+        }
+
+        const diaNum = Number(dia);
+        const mesNum = Number(mes);
+
+        if (mesNum >= 1 && mesNum <= 12 && diaNum >= 1 && diaNum <= 31) {
+            return `${dia.padStart(2, "0")}/${mes.padStart(2, "0")}/${anio}`;
+        }
+    }
+
+    const fecha = new Date(texto);
+
+    if (!isNaN(fecha)) {
+        return fecha.toLocaleDateString(
+            "es-MX",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            }
+        );
+    }
+
+    return null;
+}
+
 function formatearFecha(valor) {
 
-    if (!valor) return "No disponible";
+    if (!valor && valor !== 0) return "No disponible";
 
-    if (!isNaN(valor)) {
+    if (typeof valor === "number" && !isNaN(valor)) {
 
         const fechaExcel = new Date(
             (valor - 25569) * 86400 * 1000
@@ -71,13 +108,14 @@ function formatearFecha(valor) {
             "es-MX",
             {
                 day: "2-digit",
-                month: "long",
+                month: "2-digit",
                 year: "numeric"
             }
         );
     }
 
-    return valor;
+    const fechaFormateada = parseFechaTexto(valor);
+    return fechaFormateada || "No disponible";
 }
 
 // =====================
@@ -86,9 +124,9 @@ function formatearFecha(valor) {
 
 function formatearHora(valor) {
 
-    if (!valor) return "No disponible";
+    if (!valor && valor !== 0) return null;
 
-    if (!isNaN(valor)) {
+    if (typeof valor === "number" && !isNaN(valor)) {
 
         const totalSegundos =
             Math.round(valor * 86400);
@@ -101,10 +139,69 @@ function formatearHora(valor) {
                 (totalSegundos % 3600) / 60
             );
 
-        return `${horas.toString().padStart(2,"0")}:${minutos.toString().padStart(2,"0")} hrs`;
+        return `${horas.toString().padStart(2, "0")}:${minutos.toString().padStart(2, "0")} hrs`;
     }
 
-    return valor;
+    const texto = String(valor).trim();
+    if (texto === "") return null;
+
+    const fecha = new Date(`1970-01-01 ${texto}`);
+
+    if (!isNaN(fecha)) {
+        const horas = fecha.getHours().toString().padStart(2, "0");
+        const minutos = fecha.getMinutes().toString().padStart(2, "0");
+        return `${horas}:${minutos} hrs`;
+    }
+
+    return texto;
+}
+
+function parseFechaDate(valor) {
+    if (!valor && valor !== 0) return null;
+
+    if (typeof valor === "number" && !isNaN(valor)) {
+        return new Date((valor - 25569) * 86400 * 1000);
+    }
+
+    const texto = String(valor).trim();
+    if (texto === "") return null;
+
+    const partes = texto.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+    if (partes) {
+        let [, dia, mes, anio] = partes;
+        if (anio.length === 2) {
+            anio = `20${anio}`;
+        }
+        return new Date(`${anio}-${mes.padStart(2, "0")}-${dia.padStart(2, "0")}`);
+    }
+
+    const fecha = new Date(texto);
+    return isNaN(fecha) ? null : fecha;
+}
+
+function fechaPasada(valor) {
+    const fecha = parseFechaDate(valor);
+    if (!fecha) return false;
+
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    fecha.setHours(0, 0, 0, 0);
+
+    return fecha < hoy;
+}
+
+function obtenerHorario(registro) {
+    const inicio = formatearHora(registro.hora_inicio || registro.horaInicio || registro["Hora Inicio"] || registro["hora inicio"] || registro.hora_atencion);
+    const fin = formatearHora(registro.hora_final || registro.hora_fin || registro.horaFinal || registro["Hora Final"] || registro["hora fin"] || registro.hora_atencion);
+
+    if (inicio && fin) {
+        if (inicio === fin) {
+            return inicio;
+        }
+        return `${inicio} - ${fin}`;
+    }
+
+    return inicio || fin || "No disponible";
 }
 
 // =====================
@@ -154,6 +251,16 @@ function buscarCCT() {
         return;
     }
 
+    const alertaFecha = fechaPasada(registro.fecha_atencion)
+        ? `
+        <div class="mensaje-advertencia">
+            <strong>⚠️ Fecha de atención vencida</strong>
+            <p>Tu fecha de atención ya pasó. Pronto publicaremos una nueva fecha para atender rezagos.</p>
+            <p>Estate al pendiente de las actualizaciones.</p>
+        </div>
+        `
+        : "";
+
     resultado.innerHTML = `
 
     <div class="tarjeta-resultado">
@@ -165,6 +272,8 @@ function buscarCCT() {
             <div>${registro.cct}</div>
 
         </div>
+
+        ${alertaFecha}
 
         <div class="tarjeta-cuerpo">
 
@@ -188,7 +297,7 @@ function buscarCCT() {
             <div class="campo">
                 <span class="etiqueta">Horario</span>
                 <span class="valor">
-                    ${formatearHora(registro.hora_atencion)}
+                    ${obtenerHorario(registro)}
                 </span>
             </div>
 
