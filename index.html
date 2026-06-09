@@ -7,7 +7,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Consulta de Sede de Atención</title>
+    <title>Consulta de Atención</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -15,52 +15,93 @@
 
 <body>
 
-    <div class="contenedor">
+    <main>
 
-        <div class="encabezado">
+        <section class="hero">
 
-            <h1>Consulta de Sede de Atención</h1>
+            <div class="hero-card">
 
-            <p class="programas">
-                Becas para el Bienestar Guerrero
-            </p>
+                <div class="encabezado">
 
-            <p class="subtitulo">
-                Ingrese la Clave de Centro de Trabajo (CCT) para consultar la información de atención asignada.
-            </p>
+                    <h1>
+                        Consulta tu Sede de Atención
+                    </h1>
 
-        </div>
+                    <div class="linea-dorada"></div>
 
-        <div class="busqueda">
+                    <p class="institucion">
 
-            <label>Clave de Centro de Trabajo (CCT)</label>
+                        Becas para el Bienestar
 
-            <input
-                type="text"
-                id="cct"
-                placeholder="Ejemplo: 12DPR2057Q">
+                    </p>
 
-            <button id="btnConsultar">
-                CONSULTAR
-            </button>
+                    <p class="descripcion">
 
-        </div>
+                        Ingrese la Clave de Centro de Trabajo (CCT)
+                        para consultar la sede, fecha y horario
+                        de atención correspondiente.
 
-        <div id="resultado"></div>
+                    </p>
 
-        <footer>
+                </div>
 
-            <div id="contadorVisitas">
-                👥 Consultas realizadas: cargando...
+                <div class="buscador">
+
+                    <span class="icono">
+
+                        🔍
+
+                    </span>
+
+                    <input
+                        type="text"
+                        id="cct"
+                        maxlength="10"
+                        placeholder="Ejemplo: 12DPR2057Q">
+
+                    <button id="btnConsultar">
+
+                        CONSULTAR
+
+                    </button>
+
+                </div>
+
+                <div class="leyenda">
+
+                    Programación vigente de atención.
+
+                </div>
+
             </div>
+
+        </section>
+
+        <section>
+
+            <div id="resultado"></div>
+
+        </section>
+
+    </main>
+
+    <footer>
+
+        <div class="footer-contenido">
+
+            Este programa es público, ajeno a cualquier partido político.
+            Queda prohibido el uso para fines distintos a los establecidos
+            en el programa.
 
             <div class="version">
-                Versión 1.0
+
+                Consulta BBG · Versión 1.2
+
             </div>
 
-        </footer>
+        </div>
 
-    </div>
+    </footer>
 
     <script src="script.js"></script>
 

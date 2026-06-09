@@ -1,172 +1,210 @@
-const xlsx = require("xlsx");
-const fs = require("fs");
-const path = require("path");
+let datos = [];
 
-// =========================
-// CONFIGURACIÓN
-// =========================
+// =====================
+// CARGAR DATOS
+// =====================
 
-const archivoExcel = path.join(
-    __dirname,
-    "../excel/BaseMaestra.xlsx"
-);
+fetch("data/data.json")
+    .then(response => response.json())
+    .then(json => {
 
-const workbook =
-    xlsx.readFile(archivoExcel, {
-        cellDates: true
+        datos = json;
+
+        console.log(
+            `✅ Registros cargados: ${datos.length}`
+        );
+
+    })
+    .catch(error => {
+
+        console.error(
+            "Error cargando JSON:",
+            error
+        );
+
     });
 
-const hoja = workbook.Sheets["DATOS"];
+// =====================
+// BOTÓN CONSULTAR
+// =====================
 
-if (!hoja) {
+document
+    .getElementById("btnConsultar")
+    .addEventListener("click", buscarCCT);
 
-    console.error(
-        "❌ No existe una hoja llamada DATOS"
-    );
+// =====================
+// ENTER
+// =====================
 
-    process.exit(1);
-}
+document
+    .getElementById("cct")
+    .addEventListener("keypress", function(event) {
 
-// =========================
-// FUNCIONES
-// =========================
+        if (event.key === "Enter") {
 
-function formatearFecha(valor) {
+            buscarCCT();
 
-    if (!valor) return "";
-
-    const fecha = new Date(valor);
-
-    if (isNaN(fecha)) return valor;
-
-    const dia =
-        String(fecha.getDate())
-        .padStart(2, "0");
-
-    const mes =
-        String(fecha.getMonth() + 1)
-        .padStart(2, "0");
-
-    const anio =
-        fecha.getFullYear();
-
-    return `${dia}/${mes}/${anio}`;
-}
-
-function formatearHora(valor) {
-
-    if (!valor) return "";
-
-    // Si ya viene como texto
-    if (typeof valor === "string") {
-
-        const partes =
-            valor.match(/(\d+):(\d+)/);
-
-        if (partes) {
-
-            return `${partes[1].padStart(2,"0")}:${partes[2]}`;
         }
 
-        return valor;
+    });
+
+// =====================
+// MAYÚSCULAS
+// =====================
+
+document
+    .getElementById("cct")
+    .addEventListener("input", function() {
+
+        this.value =
+            this.value.toUpperCase();
+
+    });
+
+// =====================
+// BUSCAR CCT
+// =====================
+
+function buscarCCT() {
+
+    const cct = document
+        .getElementById("cct")
+        .value
+        .trim()
+        .toUpperCase();
+
+    const resultado =
+        document.getElementById("resultado");
+
+    if (cct === "") {
+
+        resultado.innerHTML = `
+
+        <div class="mensaje-advertencia">
+            ⚠️ Ingrese una Clave de Centro de Trabajo.
+        </div>
+
+        `;
+
+        return;
     }
 
-    // Si viene como decimal Excel
-    if (typeof valor === "number") {
+    const registro = datos.find(item =>
+        item.cct &&
+        item.cct.toUpperCase() === cct
+    );
 
-        const totalMinutos =
-            Math.round(valor * 24 * 60);
+    if (!registro) {
 
-        const horas =
-            Math.floor(totalMinutos / 60);
+        resultado.innerHTML = `
 
-        const minutos =
-            totalMinutos % 60;
+        <div class="mensaje-error">
+            ⚠️ No existe información para el CCT:
+            <strong>${cct}</strong>
+        </div>
 
-        return `${String(horas).padStart(2,"0")}:${String(minutos).padStart(2,"0")}`;
+        `;
+
+        return;
     }
+resultado.innerHTML = `
 
-    return valor;
+<div class="tarjeta-resultado">
+
+    <div class="tarjeta-header">
+
+        <h2>${registro.escuela}</h2>
+
+        <div>${registro.cct}</div>
+
+    </div>
+
+    <div class="tarjeta-cuerpo">
+
+        <div class="campo">
+
+            <span class="etiqueta">
+                Programa
+            </span>
+
+            <span class="valor">
+                ${registro.programa}
+            </span>
+
+        </div>
+
+        <div class="campo">
+
+            <span class="etiqueta">
+                Sede de Atención
+            </span>
+
+            <span class="valor">
+                ${registro.sede}
+            </span>
+
+        </div>
+
+        <div class="campo">
+
+            <span class="etiqueta">
+                Fecha
+            </span>
+
+            <span class="valor">
+                ${registro.fecha_atencion}
+            </span>
+
+        </div>
+
+        <div class="campo">
+
+            <span class="etiqueta">
+                Horario
+            </span>
+
+            <span class="valor">
+                ${registro.hora_atencion}
+            </span>
+
+        </div>
+
+        <div class="campo">
+
+            <span class="etiqueta">
+                Comité de Contraloría Social
+            </span>
+
+            <span class="valor">
+                ${registro.estatus_comite}
+            </span>
+
+        </div>
+
+        <div class="campo">
+
+            <span class="etiqueta">
+                Referencia
+            </span>
+
+            <span class="valor">
+                ${registro.referencia}
+            </span>
+
+        </div>
+
+        <a
+            class="btn-mapa"
+            href="https://www.google.com/maps?q=${registro.lat},${registro.lon}"
+            target="_blank">
+
+            📍 VER UBICACIÓN EN GOOGLE MAPS
+
+        </a>
+
+    </div>
+
+</div>
+
+`;
 }
-
-// =========================
-// CONVERSIÓN
-// =========================
-
-let datos =
-    xlsx.utils.sheet_to_json(
-        hoja,
-        {
-            raw: true,
-            defval: ""
-        }
-    );
-
-datos = datos.map(registro => {
-
-    if (registro.fecha_inicio) {
-
-        registro.fecha_inicio =
-            formatearFecha(
-                registro.fecha_inicio
-            );
-    }
-
-    if (registro.fecha_fin) {
-
-        registro.fecha_fin =
-            formatearFecha(
-                registro.fecha_fin
-            );
-    }
-
-    if (registro.fecha_atencion) {
-
-        registro.fecha_atencion =
-            formatearFecha(
-                registro.fecha_atencion
-            );
-    }
-
-    if (registro.hora_atencion) {
-
-        registro.hora_atencion =
-            formatearHora(
-                registro.hora_atencion
-            );
-    }
-
-    return registro;
-});
-
-// =========================
-// GUARDAR JSON
-// =========================
-
-const rutaJson =
-    path.join(
-        __dirname,
-        "../data/data.json"
-    );
-
-fs.writeFileSync(
-    rutaJson,
-    JSON.stringify(
-        datos,
-        null,
-        2
-    ),
-    "utf8"
-);
-
-console.log(
-    "✅ Archivo generado correctamente"
-);
-
-console.log(
-    `📄 Registros: ${datos.length}`
-);
-
-console.log(
-    `📁 ${rutaJson}`
-);
