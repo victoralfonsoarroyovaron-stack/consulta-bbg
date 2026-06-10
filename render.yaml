@@ -3,6 +3,7 @@ services:
     name: consulta-bbg
     env: node
     plan: free
+    disk: 10
     branch: main
     buildCommand: npm install
     startCommand: npm start

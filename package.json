@@ -2,11 +2,14 @@
   "dependencies": {
     "express": "^4.18.4",
     "express-session": "^1.17.3",
+    "pg": "^8.11.1",
     "sqlite3": "^5.1.6",
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "excel-to-json": "node tools/excel-a-json.js",
+    "update-data": "npm run excel-to-json"
   },
   "engines": {
     "node": "18.x"
