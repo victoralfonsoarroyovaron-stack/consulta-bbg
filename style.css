@@ -81,18 +81,27 @@ main{
     margin-bottom:18px;
 }
 
-.brand-logo{
-    display:block;
-    max-height:72px;
-    width:auto;
+.brand-block{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-width:180px;
+    height:70px;
+    border-radius:24px;
+    color:white;
+    font-weight:700;
+    font-size:16px;
+    padding:0 20px;
+    box-shadow:0 16px 30px rgba(0,0,0,.08);
+    text-transform:none;
 }
 
-.brand-logo--wide{
-    max-height:76px;
+.brand-block--gobmex{
+    background:#621132;
 }
 
-.brand-logo--small{
-    max-height:56px;
+.brand-block--bienestar{
+    background:#8c532a;
 }
 
 .brand-row--center{
@@ -649,8 +658,10 @@ footer{
         gap:14px;
     }
 
-    .brand-logo {
-        max-height:56px;
+    .brand-block{
+        min-width:150px;
+        height:60px;
+        font-size:14px;
     }
 
     .footer-contenido{
