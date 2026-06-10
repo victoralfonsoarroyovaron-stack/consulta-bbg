@@ -87,6 +87,10 @@ main{
     width:auto;
 }
 
+.brand-logo--wide{
+    max-width:260px;
+}
+
 .brand-row--center{
     justify-content:center;
     margin-bottom:20px;
