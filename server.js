@@ -173,6 +173,10 @@ app.get("/api/check-auth", (req, res) => {
     res.json({ autenticado: req.session && req.session.autenticado });
 });
 
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
+
 app.get(["/admin", "/admin/"], (req, res) => {
     res.sendFile(path.join(__dirname, "admin.html"));
 });

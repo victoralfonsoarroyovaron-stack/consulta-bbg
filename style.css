@@ -68,6 +68,33 @@ main{
     0 30px 60px rgba(0,0,0,.04);
 }
 
+.brand-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:24px;
+    flex-wrap:wrap;
+    margin-bottom:24px;
+}
+
+.brand-row--small{
+    margin-bottom:18px;
+}
+
+.brand-logo{
+    display:block;
+    max-height:72px;
+    width:auto;
+}
+
+.brand-logo--wide{
+    max-height:76px;
+}
+
+.brand-logo--small{
+    max-height:56px;
+}
+
 .encabezado{
 
     text-align:center;
