@@ -9,7 +9,7 @@
 
     <title>Admin - Reporte de consultas cct mas vistas</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
 
 </head>
 
@@ -33,6 +33,19 @@
 
                 <div class="monitor admin-panel">
 
+                    <!-- Static fallback login form (visible if JS doesn't run) -->
+                    <div class="login-form" id="staticLogin">
+                        <h2>Acceso al Panel de Administración</h2>
+                        <input 
+                            type="password" 
+                            id="passwordInput" 
+                            placeholder="Ingresa la contraseña" 
+                            autocomplete="off"
+                        />
+                        <button id="btnLogin" class="btn-monitor">Ingresar</button>
+                        <div id="loginError" style="color: #dc3545; margin-top: 12px; display: none;"></div>
+                    </div>
+
                     <button id="btnExportReport" class="btn-monitor hidden">
                         Exportar reporte de consultas
                     </button>
@@ -48,7 +61,7 @@
     </main>
 
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-    <script src="admin.js"></script>
+    <script src="/admin.js"></script>
 
 </body>
 
