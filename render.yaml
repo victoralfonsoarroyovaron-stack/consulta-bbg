@@ -8,3 +8,18 @@ services:
     buildCommand: npm install
     startCommand: npm start
     autoDeploy: true
+    envVars:
+      - key: ADMIN_PASSWORD
+        scope: build
+        value: admin1234
+      - key: DATABASE_URL
+        scope: build
+        fromDatabase:
+          name: consulta-bbg-postgres
+          property: connectionString
+  - type: pserv
+    name: consulta-bbg-postgres
+    env: postgres
+    plan: free
+    ipAllowList: []
+
