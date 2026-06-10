@@ -113,11 +113,11 @@ app.get("/api/check-auth", (req, res) => {
     res.json({ autenticado: req.session && req.session.autenticado });
 });
 
+app.use(express.static(path.join(__dirname)));
+
 app.get("/admin*", (req, res) => {
     res.sendFile(path.join(__dirname, "admin.html"));
 });
-
-app.use(express.static(path.join(__dirname)));
 
 process.on("SIGINT", () => {
     db.close((err) => {
