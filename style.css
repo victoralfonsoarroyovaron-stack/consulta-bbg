@@ -95,6 +95,11 @@ main{
     max-height:56px;
 }
 
+.brand-row--center{
+    justify-content:center;
+    margin-bottom:20px;
+}
+
 .encabezado{
 
     text-align:center;
@@ -638,6 +643,14 @@ footer{
     .btn-mapa{
         padding:14px;
         font-size:14px;
+    }
+
+    .brand-row {
+        gap:14px;
+    }
+
+    .brand-logo {
+        max-height:56px;
     }
 
     .footer-contenido{
