@@ -64,18 +64,38 @@ function parseFechaTexto(valor) {
     const partes = texto.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
 
     if (partes) {
-        let [, dia, mes, anio] = partes;
+        let [, parte1, parte2, anio] = partes;
 
         if (anio.length === 2) {
             anio = `20${anio}`;
         }
 
-        const diaNum = Number(dia);
-        const mesNum = Number(mes);
+        const num1 = Number(parte1);
+        const num2 = Number(parte2);
+        let dia;
+        let mes;
 
-        if (mesNum >= 1 && mesNum <= 12 && diaNum >= 1 && diaNum <= 31) {
-            return `${dia.padStart(2, "0")}/${mes.padStart(2, "0")}/${anio}`;
+        if (num1 > 12 && num2 <= 12) {
+            dia = num1;
+            mes = num2;
+        } else if (num2 > 12 && num1 <= 12) {
+            dia = num2;
+            mes = num1;
+        } else {
+            // Si ambos son válidos como mes y día, asumimos formato mm/dd y lo convertimos a dd/mm.
+            dia = num2;
+            mes = num1;
         }
+
+        if (mes >= 1 && mes <= 12 && dia >= 1 && dia <= 31) {
+            return `${dia.toString().padStart(2, "0")}/${mes.toString().padStart(2, "0")}/${anio}`;
+        }
+    }
+
+    const isoPartes = texto.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+    if (isoPartes) {
+        let [, anio, mes, dia] = isoPartes;
+        return `${dia.padStart(2, "0")}/${mes.padStart(2, "0")}/${anio}`;
     }
 
     const fecha = new Date(texto);
@@ -98,24 +118,28 @@ function formatearFecha(valor) {
 
     if (!valor && valor !== 0) return "No disponible";
 
+    let fecha = null;
+
     if (typeof valor === "number" && !isNaN(valor)) {
-
-        const fechaExcel = new Date(
-            (valor - 25569) * 86400 * 1000
-        );
-
-        return fechaExcel.toLocaleDateString(
-            "es-MX",
-            {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric"
-            }
-        );
+        fecha = new Date((valor - 25569) * 86400 * 1000);
+    } else {
+        fecha = parseFechaDate(valor);
     }
 
-    const fechaFormateada = parseFechaTexto(valor);
-    return fechaFormateada || "No disponible";
+    if (!fecha || isNaN(fecha)) {
+        const fechaFormateada = parseFechaTexto(valor);
+        return fechaFormateada || "No disponible";
+    }
+
+    return fecha.toLocaleDateString(
+        "es-MX",
+        {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        }
+    );
 }
 
 // =====================
@@ -166,13 +190,36 @@ function parseFechaDate(valor) {
     const texto = String(valor).trim();
     if (texto === "") return null;
 
+    const isoPartes = texto.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+    if (isoPartes) {
+        let [, anio, mes, dia] = isoPartes;
+        return new Date(Number(anio), Number(mes) - 1, Number(dia));
+    }
+
     const partes = texto.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
     if (partes) {
-        let [, dia, mes, anio] = partes;
+        let [, parte1, parte2, anio] = partes;
         if (anio.length === 2) {
             anio = `20${anio}`;
         }
-        return new Date(`${anio}-${mes.padStart(2, "0")}-${dia.padStart(2, "0")}`);
+
+        const num1 = Number(parte1);
+        const num2 = Number(parte2);
+        let dia;
+        let mes;
+
+        if (num1 > 12 && num2 <= 12) {
+            dia = num1;
+            mes = num2;
+        } else if (num2 > 12 && num1 <= 12) {
+            dia = num2;
+            mes = num1;
+        } else {
+            dia = num2;
+            mes = num1;
+        }
+
+        return new Date(Number(anio), Number(mes) - 1, Number(dia));
     }
 
     const fecha = new Date(texto);
