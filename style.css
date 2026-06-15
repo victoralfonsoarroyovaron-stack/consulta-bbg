@@ -475,6 +475,63 @@ main{
     font-size:16px;
 
     margin-bottom:15px;
+}
+
+/* Tabla de consultas */
+.tabla-consultas {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.tabla-consultas thead {
+    background-color: #f5f6f8;
+    border-bottom: 2px solid #621132;
+}
+
+.tabla-consultas th {
+    padding: 14px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #621132;
+    letter-spacing: 0.5px;
+}
+
+.tabla-consultas th.columna-numero {
+    text-align: center;
+    width: 80px;
+}
+
+.tabla-consultas tbody tr {
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+}
+
+.tabla-consultas tbody tr:hover {
+    background-color: rgba(98, 17, 50, 0.02);
+}
+
+.tabla-consultas tbody tr:last-child {
+    border-bottom: none;
+}
+
+.tabla-consultas td {
+    padding: 12px;
+    color: #333;
+}
+
+.tabla-consultas td.codigo {
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    color: #621132;
+}
+
+.tabla-consultas td.columna-numero {
+    text-align: center;
+    font-weight: 600;
+    color: #9D2449;
+}
 
     box-sizing:border-box;
 }

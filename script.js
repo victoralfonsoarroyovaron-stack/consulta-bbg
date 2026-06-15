@@ -359,21 +359,6 @@ function buscarCCT() {
         <div class="tarjeta-cuerpo">
 
             <div class="campo">
-                <span class="etiqueta">SARE</span>
-                <span class="valor">${registro.SARE || registro.sare || "No disponible"}</span>
-            </div>
-
-            <div class="campo">
-                <span class="etiqueta">Municipio</span>
-                <span class="valor">${registro.municipio || "No disponible"}</span>
-            </div>
-
-            <div class="campo">
-                <span class="etiqueta">Localidad</span>
-                <span class="valor">${registro.localidad || "No disponible"}</span>
-            </div>
-
-            <div class="campo">
                 <span class="etiqueta">Programa</span>
                 <span class="valor">${registro.programa}</span>
             </div>

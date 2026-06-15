@@ -94,21 +94,24 @@ function renderConsultas(lista, limite) {
     const subset = lista.slice(0, limite);
     return `
         <div class="monitor-title"><strong>Escuelas más consultadas</strong></div>
-        <ul>
-            ${subset.map(item => `
-                <li>
-                    <div class="consulta-item">
-                        <span class="consulta-titulo">${item.escuela} (${item.cct})</span>
-                        <span>${item.contador} consulta${item.contador === 1 ? "" : "s"}</span>
-                    </div>
-                    <div class="consulta-meta">
-                        <span>SARE: ${item.sare || "No disponible"}</span>
-                        <span>Municipio: ${item.municipio || "No disponible"}</span>
-                        <span>Localidad: ${item.localidad || "No disponible"}</span>
-                    </div>
-                </li>
-            `).join("")}
-        </ul>
+        <table class="tabla-consultas">
+            <thead>
+                <tr>
+                    <th>Escuela</th>
+                    <th>CCT</th>
+                    <th class="columna-numero">Consultas</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${subset.map(item => `
+                    <tr>
+                        <td>${item.escuela}</td>
+                        <td class="codigo">${item.cct}</td>
+                        <td class="columna-numero">${item.contador}</td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
     `;
 }
 
@@ -178,9 +181,6 @@ async function descargarReporteExcel() {
     const hoja = topConsultas.map(item => ({
         CCT: item.cct,
         Escuela: item.escuela,
-        SARE: item.sare || "No disponible",
-        Municipio: item.municipio || "No disponible",
-        Localidad: item.localidad || "No disponible",
         Consultas: item.contador
     }));
 
