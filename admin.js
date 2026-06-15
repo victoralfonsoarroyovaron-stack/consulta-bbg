@@ -99,6 +99,9 @@ function renderConsultas(lista, limite) {
                 <tr>
                     <th>Escuela</th>
                     <th>CCT</th>
+                    <th>SARE</th>
+                    <th>Municipio</th>
+                    <th>Localidad</th>
                     <th class="columna-numero">Consultas</th>
                 </tr>
             </thead>
@@ -107,6 +110,9 @@ function renderConsultas(lista, limite) {
                     <tr>
                         <td>${item.escuela}</td>
                         <td class="codigo">${item.cct}</td>
+                        <td>${item.sare || "No disponible"}</td>
+                        <td>${item.municipio || "No disponible"}</td>
+                        <td>${item.localidad || "No disponible"}</td>
                         <td class="columna-numero">${item.contador}</td>
                     </tr>
                 `).join("")}
@@ -181,6 +187,9 @@ async function descargarReporteExcel() {
     const hoja = topConsultas.map(item => ({
         CCT: item.cct,
         Escuela: item.escuela,
+        SARE: item.sare || "No disponible",
+        Municipio: item.municipio || "No disponible",
+        Localidad: item.localidad || "No disponible",
         Consultas: item.contador
     }));
 
