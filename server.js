@@ -3,14 +3,35 @@ const session = require("express-session");
 const path = require("path");
 const fs = require("fs");
 
-const usePostgres = Boolean(process.env.DATABASE_URL);
+function getPostgresConnectionString() {
+    if (process.env.DATABASE_URL) {
+        return process.env.DATABASE_URL;
+    }
+
+    const instance = process.env.CLOUD_SQL_CONNECTION_NAME;
+    if (!instance) {
+        return null;
+    }
+
+    const user = process.env.DB_USER || "postgres";
+    const password = process.env.DB_PASSWORD || "";
+    const database = process.env.DB_NAME || "postgres";
+
+    return `postgresql://${encodeURIComponent(user)}:${encodeURIComponent(password)}@/${database}?host=/cloudsql/${instance}`;
+}
+
+const connectionString = getPostgresConnectionString();
+const usePostgres = Boolean(connectionString);
 let db = null;
 let pgPool = null;
 let sqlite3 = null;
 
 if (usePostgres) {
     const { Pool } = require("pg");
-    pgPool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+    pgPool = new Pool({
+        connectionString,
+        ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false
+    });
 } else {
     sqlite3 = require("sqlite3").verbose();
 }
