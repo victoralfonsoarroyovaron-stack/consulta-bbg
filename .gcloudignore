@@ -1,0 +1,15 @@
+# Ignored files
+node_modules/
+npm-debug.log
+.git
+.gitignore
+logs/
+.env
+.env.local
+data_local.json
+script_local.js
+admin/
+docs/
+excel/
+tools/
+*.db
